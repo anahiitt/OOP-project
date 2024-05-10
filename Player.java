@@ -1,33 +1,57 @@
-public class Player{
-        private String name;
-        private int level;
-        private int hitPoints;
-        private int armorClass;
-        private int intelligence;
-        private int strength;
-        private int dexterity;
-        private int constitution;
-        private int wisdom;
-        private int charisma;
-        private Dice dice;
-        private int maxHitPoints;
-    // Constructor
+public class Player extends DnD{
+    private Position position;
+    private String name;
+    private int level;
+    private int hitPoints;
+    private int armorClass;
+    private int wisdom;
+    private int strength;
+
     public Player(String name, int level, int hitPoints, int armorClass, int intelligence, int strength,  int dexterity, int constitution, int wisdom, int charisma, int maxHitPoints){
         this.name = name;
         this.level = level;
         this.hitPoints = hitPoints;
         this.armorClass = armorClass;
-        this.intelligence = intelligence;
         this.strength = strength;
-        this.dexterity = dexterity;
-        this.constitution = constitution;
         this.wisdom = wisdom;
-        this.charisma = charisma;
-        this.dice = new Dice();
-        this.maxHitPoints = maxHitPoints;
+    }
+    public Player(){
+        position = new Position(3, 3);
+        name = null;
+        level = 1;
+        hitPoints = 10;
+        armorClass = 5;
+        strength = 10;
+        wisdom = 10;
+    }
+    public Player(Player player){
+        position = new Position(player.getPosition().getX(), player.getPosition().getY());
+        this.name = player.getName();
+        this.level = player.getLevel();
+        hitPoints = player.getHitPoints();
+        armorClass = player.getArmorClass();
+        strength = player.getLevel();
+        wisdom = player.getWisdom();
+    }
+    public Player(int x, int y){
+        position = new Position(x, y);
+        name = null;
+        level = 1;
+        hitPoints = 10;
+        armorClass = 5;
+        strength = 10;
+        wisdom = 10;
+    }
+    public void setPosition(int x, int y){
+        this.position = new Position(x, y);
+    }
+    public void setPosition(Position position){
+        this.position = new Position(position);
     }
 
-    // getters
+    public Position getPosition(){
+        return new Position();
+    }
     public String getName(){
         return name;
     }
@@ -44,36 +68,19 @@ public class Player{
         return armorClass;
     }
 
-    public int getIntelligence(){
-        return intelligence;
-    }
-
     public int getStrength(){
         return strength;
-    }
-
-    public int getDexterity() {
-        return dexterity;
-    }
-
-    public int getConstitution(){
-        return constitution;
-    }
-
-    public int getCharisma() {
-        return charisma;
     }
 
     public int getWisdom() {
         return wisdom;
     }
 
-    public int getMaxHitPoints() {
-        return maxHitPoints;
-    }
-
-    //setters
     public void setName(String name){
+        if (name == null){
+            System.out.println("That is not a name");
+            System.exit(0);
+        }
         this.name = name;
     }
 
@@ -82,6 +89,11 @@ public class Player{
     }
 
     public void setHitPoints(int hitPoints){
+        if (hitPoints < 6 || hitPoints > 12){
+            System.out.println("As you showed that you are not very noble, thus, you will be executed.");
+            System.out.println("You lost.");
+            System.exit(0);
+        }
         this.hitPoints = hitPoints;
     }
 
@@ -89,65 +101,57 @@ public class Player{
         this.armorClass = armorClass;
     }
 
-    public void setIntelligence(int intelligence) {
-        this.intelligence = intelligence;
-    }
 
     public void setStrength(int strength) {
+        if (hitPoints < 10 || hitPoints > 12){
+            System.out.println("As you showed that you are not very noble, thus, you will be executed.");
+            System.out.println("You lost.");
+            System.exit(0);
+        }
         this.strength = strength;
     }
 
-    public void setDexterity(int dexterity) {
-        this.dexterity = dexterity;
-    }
-
-    public void setConstitution(int constitution) {
-        this.constitution = constitution;
-    }
-
-    public void setCharisma(int charisma) {
-        this.charisma = charisma;
-    }
-
     public void setWisdom(int wisdom) {
+        if (hitPoints < 10 || hitPoints > 12){
+            System.out.println("As you showed that you are not very noble, thus, you will be executed.");
+            System.out.println("You lost.");
+            System.exit(0);
+        }
         this.wisdom = wisdom;
     }
-
-    public void setMaxHitPoints(int maxHitPoints) {
-        this.maxHitPoints = maxHitPoints;
+    public void attack(Monster monster) {
+        int initialHitPoints = monster.getHitPoints();
+        monster.setHitPoints(monster.getHitPoints() - this.armorClass);
+        if(monster.getHitPoints() == initialHitPoints){
+            System.out.println("The attack was missed");
+        }
     }
 
+
     public String toString() {
-        return "Player{" + "name: " + name +
+        return "Player\n" + "name: " + name +
                 ", level: " + level +
                 ", hitPoints: " + hitPoints +
                 ", armorClass: " + armorClass +
                 ", strength: " + strength +
-                ", dexterity: " + dexterity +
-                ", constitution: " + constitution +
-                ", intelligence: " + intelligence +
-                ", wisdom: " + wisdom +
-                ", charisma: " + charisma + "}";
+                ", wisdom: " + wisdom;
     }
-
-    public void takeDamage(int damage){
-        this.hitPoints -= damage;
-    }
-
     public void levelUp(){
         this.level ++;
     }
+    public void takeDamage(int attackDamage) {
+        if ((hitPoints - attackDamage) < 1) {
+            System.out.println("You died.");
+            isAlive();
+        }
+    }
 
-    public void defend(){}
-
-    public void attack(){}
+    public boolean isAlive() {
+        return hitPoints > 0;
+    }
 
     public void heal(int amount){
         hitPoints += amount;
-        if(hitPoints > maxHitPoints)
-            hitPoints = maxHitPoints;
         System.out.println(name  + " heals for " + amount + " hit points!!");
     }
-
-
 }
