@@ -1,29 +1,21 @@
 public class Beholder extends Monster{
-    private int speed;
     private int climbSpeed;
-    private int challengeRating;
 
     public Beholder(String name, int hitPoints, int attackDamage, int armorClass, boolean isAlive,
-                    int speed, int climbSpeed, int challengeRating) {
-        super(name, hitPoints, attackDamage, armorClass, isAlive);
-        this.speed = speed;
+                    int speed, int climbSpeed, int challengeRating, int x, int y) {
+        super(name, hitPoints, attackDamage, armorClass, isAlive, x, y);
         this.climbSpeed = climbSpeed;
-        this.challengeRating = challengeRating;
     }
-    public Beholder(){
-        super("Beholder", 168, 17, 17, true);
-        speed = 50;
+    public Beholder(int x, int y){
+        super("Beholder", 8, 3, 17, true, x, y);
         climbSpeed = 40;
-        challengeRating = 13;
+        setPosition(0, 3);
     }
-    public int getSpeed() {
-        return speed;
+    public String toString(){
+        return "B";
     }
     public int getClimbSpeed() {
         return climbSpeed;
-    }
-    public int getChallengeRating() {
-        return challengeRating;
     }
 
 }
