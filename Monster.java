@@ -1,18 +1,19 @@
 public class Monster {
     private boolean isAlive;
-    private String name; //name of the monster
-    private int hitPoints; //health of the monster
-    private int attackDamage; //the amount of damage the monster deals in combat
-    private int armorClass; //difficulty level of hitting the monster.
+    protected Position position;
+    private String name;
+    private int hitPoints;
+    private int attackDamage;
+    private int armorClass;
 
-    public Monster(String name, int hitPoints, int attackDamage, int armorClass, boolean isAlive) {
+    public Monster(String name, int hitPoints, int attackDamage, int armorClass, boolean isAlive, int x, int y) {
         this.name = name;
         this.hitPoints = hitPoints;
         this.attackDamage = attackDamage;
         this.armorClass = armorClass;
         this.isAlive = isAlive;
+        this.position = new Position(x, y);
     }
-
     public Monster(Monster that) {
         this.name = that.name;
         this.hitPoints = that.hitPoints;
@@ -23,6 +24,9 @@ public class Monster {
 
     public String getName() {
         return name;
+    }
+    public Position getPosition() {
+        return new Position();
     }
 
     public int getHitPoints() {
@@ -36,7 +40,13 @@ public class Monster {
     public void setAttackDamage(int attackDamage) {
         this.attackDamage = attackDamage;
     }
-
+    public void setPosition(int x, int y) {
+        position.setX(x);
+        position.setY(y);
+    }
+    public void setHitPoints(int hitPoints){
+        this.hitPoints = hitPoints;
+    }
     public int getArmorClass() {
         return armorClass;
     }
@@ -52,23 +62,10 @@ public class Monster {
         System.out.println("Armor Class: " + this.armorClass);
     }
 
-    public void attack(Object target) {
-        try {
-            if (!(target instanceof Player || target instanceof Monster)) {
-                throw new NoSuchTargetException();
-            }
-        } catch (NoSuchTargetException e) {
-            System.out.println("Can not attack such a target");
-        }
-        if(target instanceof Monster){
-            Monster newTarget = (Monster) target;
-        }
-        else{
-            Player newTarget = (Player) target;
-        }
-        int initialHitPoints = newTarget.getHitPoits;
-        newTarget.setHitPoints(newTarget.getHitPoints() - this.getAttackDamage());
-        if(newTarget.getHitPoints == initialHitPoints){
+    public void attack(Player player) {
+        int initialHitPoints = player.getHitPoints();
+        player.setHitPoints(player.getHitPoints() - this.getAttackDamage());
+        if(player.getHitPoints() == initialHitPoints){
             System.out.println("The attack was missed");
         }
     }
@@ -81,3 +78,4 @@ public class Monster {
     }
 
 }
+
